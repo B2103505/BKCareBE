@@ -1,5 +1,7 @@
 
 import db from '../models/index';
+import Crud_service from '../services/Crud_service';
+
 
 let getHomePage = async (req, res) => {
     try {
@@ -19,6 +21,17 @@ let getAbout = (req, res) => {
     return res.render('test/about.ejs');
 }
 
+let getCrud = (req, res) => {
+    return res.render('crud.ejs');
+}
+
+let postCrud = async (req, res) => {
+    let message = await Crud_service.createNewUser(req.body);
+    console.log(message);
+    // console.log(req.body);
+    return res.send('post crud from server');
+}
+
 
 // Object : {
 //     key: '',
@@ -28,4 +41,6 @@ let getAbout = (req, res) => {
 module.exports = {
     getHomePage: getHomePage,
     getAbout: getAbout,
+    getCrud: getCrud,
+    postCrud: postCrud,
 }
