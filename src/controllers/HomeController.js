@@ -32,6 +32,17 @@ let postCrud = async (req, res) => {
     return res.send('post crud from server');
 }
 
+let displayGetCrud = async (req,res) => {
+    let data = await Crud_service.getAllUser();
+    console.log('----------------');
+    console.log(data);
+    console.log('----------------');
+
+    return res.render('displayCRUD.ejs',{
+        DataTable: data
+    });
+}
+
 
 // Object : {
 //     key: '',
@@ -43,4 +54,6 @@ module.exports = {
     getAbout: getAbout,
     getCrud: getCrud,
     postCrud: postCrud,
+    displayGetCrud: displayGetCrud,
+    
 }
