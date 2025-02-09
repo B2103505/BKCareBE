@@ -15,9 +15,12 @@ let initWebRoutes = (app) => {
     router.post('/put-crud', HomeController.putCRUD);
     router.get('/delete-crud', HomeController.deleteCRUD);
 
+    //RestApi
     router.post('/api/login', UserController.handleLogin);
-    router.get('/api/get-all-user',UserController.handleGetAllUsers);
-
+    router.get('/api/get-all-user', UserController.handleGetAllUsers);
+    router.post('/api/create-new-user', UserController.handleCreateNewUser);
+    router.put('/api/edit-user', UserController.handleEditUser);
+    router.delete('/api/delete-user', UserController.handleDeleteUser);
 
     // router.get('/home', (req, res) => {
     //     return res.send('Home page coming soon');
