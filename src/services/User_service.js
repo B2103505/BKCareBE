@@ -172,7 +172,8 @@ let updateUserData = (data) => {
                 db.User.update({
                     firstName: data.firstName,
                     lastName: data.lastName,
-                    address: data.address
+                    address: data.address,
+                    phoneNumber: data.phoneNumber
                 },
                     { where: { id: data.id } }
                 )
