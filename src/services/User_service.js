@@ -193,6 +193,7 @@ let updateUserData = (data) => {
     })
 
 }
+
 let getAllCodeService = (typeInput) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -216,6 +217,8 @@ let getAllCodeService = (typeInput) => {
         }
     })
 }
+
+
 
 module.exports = {
     handleUserLogin: handleUserLogin,
