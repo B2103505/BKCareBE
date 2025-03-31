@@ -178,7 +178,8 @@ let updateUserData = (data) => {
                     phoneNumber: data.phoneNumber,
                     roleId: data.roleId,
                     positionId: data.positionId,
-                    gender: data.gender
+                    gender: data.gender,
+                    image: data.avt
                 },
                     { where: { id: data.id } }
                 )
