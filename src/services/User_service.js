@@ -122,7 +122,8 @@ let createNewUser = (data) => {
                     address: data.address,
                     gender: data.gender,
                     roleId: data.roleId,
-                    positionId: data.positionId
+                    positionId: data.positionId,
+                    image: data.avt
                 })
 
                 resolve({
