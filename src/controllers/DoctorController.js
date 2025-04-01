@@ -43,8 +43,28 @@ let PostInfoDoctor = async (req, res) => {
     }
 }
 
+let getDetailDoctor = async (req, res) => {
+    try {
+        // if (!req.query.id){
+        //     return res.status(200).json({
+        //         errCode: -2,
+        //         errMessage: 'Missing req.query.id'
+        //     })
+        // }
+        let infor = await DoctorService.getDetailDoctorService(req.query.id);
+        return res.status(200).json(infor)
+    } catch (e) {
+        console.log(e);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: 'error from server'
+        })
+    }
+}
+
 module.exports = {
     getTopDoctorHome: getTopDoctorHome,
     getAllDoctors: getAllDoctors,
-    PostInfoDoctor: PostInfoDoctor
+    PostInfoDoctor: PostInfoDoctor,
+    getDetailDoctor: getDetailDoctor,
 }
