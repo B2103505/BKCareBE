@@ -1,6 +1,6 @@
 import { where } from "sequelize";
 import db from "../models";
-import _, { reject } from 'lodash';
+import _ from 'lodash';
 
 require('dotenv').config();
 const MAX_NUMBER_SCHEDULE = process.env.MAX_NUMBER_SCHEDULE;
@@ -162,17 +162,9 @@ let bulkCreateSchedule = (data) => {
                     raw: true
                 });
 
-                //convert date
-                if (existing && existing.length > 0) {
-                    existing = existing.map(item => {
-                        item.date = new Date(item.date).getTime();
-                        return item;
-                    })
-                }
-
                 //compare different
                 let toCreate = _.differenceWith(schedule, existing, (a, b) => {
-                    return a.timeType === b.timeType && a.date === b.date;
+                    return a.timeType === b.timeType && +a.date === +b.date;
                 })
 
                 //create data
@@ -192,16 +184,21 @@ let bulkCreateSchedule = (data) => {
 }
 
 let getScheduleByDateService = (doctorId, date) => {
-    return new Promise( async (resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         try {
-            if (!doctorId || !date){
+            if (!doctorId || !date) {
                 resolve({
                     errCode: -1,
                     errMessage: 'Missing parameter'
                 })
             } else {
                 let dataSchedule = await db.Schedule.findAll({
-                    where: {doctorId: doctorId , date: date}
+                    where: { doctorId: doctorId, date: date },
+                    include: [
+                        { model: db.Allcode, as: 'timeTypeData', attributes: ['valueEn', 'valueVi'] },
+                    ],
+                    raw: false,
+                    nest: true
                 })
 
                 if (!dataSchedule) dataSchedule = [];
