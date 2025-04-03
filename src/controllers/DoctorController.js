@@ -45,13 +45,20 @@ let PostInfoDoctor = async (req, res) => {
 
 let getDetailDoctor = async (req, res) => {
     try {
-        // if (!req.query.id){
-        //     return res.status(200).json({
-        //         errCode: -2,
-        //         errMessage: 'Missing req.query.id'
-        //     })
-        // }
         let infor = await DoctorService.getDetailDoctorService(req.query.id);
+        return res.status(200).json(infor)
+    } catch (e) {
+        console.log(e);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: 'error from server'
+        })
+    }
+}
+
+let BulkCreateSchedule = async (req, res) => {
+    try {
+        let infor = await DoctorService.bulkCreateSchedule(req.body);
         return res.status(200).json(infor)
     } catch (e) {
         console.log(e);
@@ -67,4 +74,5 @@ module.exports = {
     getAllDoctors: getAllDoctors,
     PostInfoDoctor: PostInfoDoctor,
     getDetailDoctor: getDetailDoctor,
+    BulkCreateSchedule: BulkCreateSchedule
 }
