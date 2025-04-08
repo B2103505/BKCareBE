@@ -1,6 +1,6 @@
 import { where } from "sequelize";
 import db from "../models";
-import _ from 'lodash';
+import _, { reject } from 'lodash';
 
 require('dotenv').config();
 const MAX_NUMBER_SCHEDULE = process.env.MAX_NUMBER_SCHEDULE;
@@ -171,7 +171,7 @@ let getDetailDoctorService = (inputId) => {
                 if (data && data.image) {
                     data.image = new Buffer(data.image, "base64").toString("binary");
                 }
-                
+
                 if (!data) data = {};
 
                 resolve({
@@ -262,11 +262,49 @@ let getScheduleByDateService = (doctorId, date) => {
     })
 }
 
+let getExtraInfoByIdService = (idInput) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!idInput) {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Missing required parameter !'
+                })
+            } else {
+                let data = await db.Doctor_Info.findOne({
+                    where: {
+                        doctorId: idInput
+                    },
+                    attributes: {
+                        exclude: ['id', 'doctorId']
+                    },
+                    include: [
+                        { model: db.Allcode, as: 'PriceTypeData', attributes: ['valueEn', 'valueVi'] },
+                        { model: db.Allcode, as: 'PaymentTypeData', attributes: ['valueEn', 'valueVi'] },
+                        { model: db.Allcode, as: 'ProvinceTypeData', attributes: ['valueEn', 'valueVi'] },
+                    ],
+                    raw: false, nest: true
+                })
+
+                if (!data) data = {};
+                resolve({
+                    errCode: 0,
+                    errMessage: 'Success',
+                    data: data
+                })
+            }
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
+
 module.exports = {
     getTopDoctorHome: getTopDoctorHome,
     getAllDoctors: getAllDoctors,
     saveInfoDoctor: saveInfoDoctor,
     getDetailDoctorService: getDetailDoctorService,
     bulkCreateSchedule: bulkCreateSchedule,
-    getScheduleByDateService: getScheduleByDateService
+    getScheduleByDateService: getScheduleByDateService,
+    getExtraInfoByIdService: getExtraInfoByIdService
 };
