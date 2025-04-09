@@ -43,7 +43,7 @@ let initWebRoutes = (app) => {
   router.post("/api/create-new-specialty", SpecialtyController.CreateNewSpecialty);
   router.get("/api/get-all-specialty", SpecialtyController.getAllSpecialty);
 
-  router.post("/api/create-new-clinic", SpecialtyController.CreateNewSpecialty);
+  router.post("/api/create-new-clinic", ClinicController.CreateClinic);
 
   return app.use("/", router);
 };
