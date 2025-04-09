@@ -13,6 +13,20 @@ let CreateClinic = async (req, res) => {
   }
 };
 
+let getAllClinic = async (req, res) => {
+  try {
+    let infor = await ClinicService.getAllClinic();
+    return res.status(200).json(infor);
+  } catch (e) {
+    console.log(e);
+    return res.status(200).json({
+      errCode: -1,
+      errMessage: "error from server",
+    });
+  }
+};
+
 module.exports = {
   CreateClinic: CreateClinic,
+  getAllClinic: getAllClinic,
 };
