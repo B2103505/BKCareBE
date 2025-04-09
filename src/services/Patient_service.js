@@ -1,7 +1,7 @@
 import { where } from "sequelize";
 import db from "../models";
 require('dotenv').config();
-const MAX_NUMBER_SCHEDULE = process.env.MAX_NUMBER_SCHEDULE;
+import EmailService from './EmailService'
 
 
 let PostBookAppointmentService = (data) => {
@@ -13,6 +13,15 @@ let PostBookAppointmentService = (data) => {
                     errMessage: 'Missing required parameter !'
                 })
             } else {
+
+                await EmailService.sendSimpleEmail({
+                    receiver: data.email,
+                    fullName: 'patient Name',
+                    time:  '8:00 - 9:00 thứ năm 10/4/2025',
+                    doctorName: 'Penaldo',
+                    redirectLink: 'https://www.youtube.com/'
+                })
+
                 //upsert patient
                 let user = await db.User.findOrCreate({
                     where: { email: data.email },
