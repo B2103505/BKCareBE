@@ -55,37 +55,35 @@ let getAllClinic = () => {
 };
 
 let getDetaiClinicById = (inputID) => {
-  return new promise(async (resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     try {
       if (!inputID) {
-        resolve({
+        return resolve({
           errCode: 1,
           errMessage: "Missing parameter",
         });
-      } else {
-        let data = await db.Clinic.FindOne({
-          where: {
-            id: inputID,
-          },
-          attributes: ["descriptionHTML", "descriptionMarkdown"],
-        });
-
-        if (data) {
-          let doctorClinic = [];
-
-          doctorClinic = await db.Doctor_Infor.findAll({
-            where: { clinicId: inputID },
-            attributes: ["doctorId", "provinceId"],
-          });
-
-          data.doctorClinic = doctorClinic;
-        } else data = {};
       }
 
-      resolve({
+      let data = await db.Clinic.findOne({
+        where: {
+          id: inputID,
+        },
+        attributes: ["name", "address", "image", "descriptionHTML", "descriptionMarkdown"],
+      });
+
+      if (data) {
+        let doctorClinic = await db.Doctor_Info.findAll({
+          where: { doctorId: inputID },
+          attributes: ["doctorId", "provinceId"],
+        });
+
+        data.doctorClinic = doctorClinic;
+      }
+
+      return resolve({
         errMessage: "ok",
         errCode: 0,
-        data,
+        data: data || {},
       });
     } catch (e) {
       reject(e);

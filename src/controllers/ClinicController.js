@@ -28,7 +28,7 @@ let getAllClinic = async (req, res) => {
 
 let getClinicById = async (req, res) => {
   try {
-    let infor = await ClinicService.getDetaiClinicById();
+    let infor = await ClinicService.getDetaiClinicById(req.query.id);
     return res.status(200).json(infor);
   } catch (e) {
     console.log(e);
