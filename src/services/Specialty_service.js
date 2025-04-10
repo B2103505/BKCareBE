@@ -1,3 +1,4 @@
+import { where } from "sequelize";
 import db from "../models";
 
 let CreateNewSpecialtyService = (data) => {
@@ -49,7 +50,57 @@ let getAllSpecialtyService = () => {
     })
 }
 
+let getDetailSpecialtyByIdService = (inputId, location) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!inputId || !location) {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Missing parameter !'
+                })
+            } else {
+                //Tìm khoa theo id
+                let data = await db.Specialty.findOne({
+                    where: { id: inputId },
+                    attributes: ['descriptionHTML', 'descriptionMarkdown'],
+
+                });
+
+                //nếu tìm thấy chuyên khoa
+                if (data) {
+                    let doctorSpecialty = [];
+
+                    //nếu tìm theo location = tất cả
+                    if (location === 'ALL') {
+                        doctorSpecialty = await db.Doctor_Info.findAll({
+                            where: { SpecialtyId: inputId },
+                            attributes: ['doctorId', 'provinceId'],
+                        })
+                    } else {//nếu tìm theo tỉnh thành
+                        doctorSpecialty = await db.Doctor_Info.findAll({
+                            where: {
+                                SpecialtyId: inputId,
+                                provinceId: location
+                            },
+                            attributes: ['doctorId', 'provinceId'],
+                        })
+                    }
+                    data.doctorSpecialty = doctorSpecialty;
+                } else data = {}
+
+                resolve({
+                    errCode: 0,
+                    errMessage: 'OK',
+                    data
+                })
+            }
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
 
 module.exports = {
-    CreateNewSpecialtyService, getAllSpecialtyService
+    CreateNewSpecialtyService, getAllSpecialtyService,
+    getDetailSpecialtyByIdService,
 }
