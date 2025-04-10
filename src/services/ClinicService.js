@@ -54,7 +54,47 @@ let getAllClinic = () => {
   });
 };
 
+let getDetaiClinicById = (inputID) => {
+  return new promise(async (resolve, reject) => {
+    try {
+      if (!inputID) {
+        resolve({
+          errCode: 1,
+          errMessage: "Missing parameter",
+        });
+      } else {
+        let data = await db.Clinic.FindOne({
+          where: {
+            id: inputID,
+          },
+          attributes: ["descriptionHTML", "descriptionMarkdown"],
+        });
+
+        if (data) {
+          let doctorClinic = [];
+
+          doctorClinic = await db.Doctor_Infor.findAll({
+            where: { clinicId: inputID },
+            attributes: ["doctorId", "provinceId"],
+          });
+
+          data.doctorClinic = doctorClinic;
+        } else data = {};
+      }
+
+      resolve({
+        errMessage: "ok",
+        errCode: 0,
+        data,
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 module.exports = {
   CreateClinic: CreateClinic,
   getAllClinic: getAllClinic,
+  getDetaiClinicById: getDetaiClinicById,
 };
