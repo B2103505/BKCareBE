@@ -73,11 +73,12 @@ let getDetaiClinicById = (inputID) => {
 
       if (data) {
         let doctorClinic = await db.Doctor_Info.findAll({
-          where: { doctorId: inputID },
+          where: { clinicId: inputID },
           attributes: ["doctorId", "provinceId"],
         });
-
+        // console.log('check doctor', doctorClinic)
         data.doctorClinic = doctorClinic;
+
       }
 
       return resolve({
