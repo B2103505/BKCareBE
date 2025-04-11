@@ -62,7 +62,7 @@ let getDetailSpecialtyByIdService = (inputId, location) => {
                 //Tìm khoa theo id
                 let data = await db.Specialty.findOne({
                     where: { id: inputId },
-                    attributes: ['descriptionHTML', 'descriptionMarkdown'],
+                    attributes: ['descriptionHTML', 'descriptionMarkdown', 'image'],
 
                 });
 

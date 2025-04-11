@@ -5,7 +5,7 @@ import { raw } from "body-parser";
 
 require("dotenv").config();
 const MAX_NUMBER_SCHEDULE = process.env.MAX_NUMBER_SCHEDULE;
-const emailService = require("./emailService");
+const emailService = require("./EmailService");
 
 let getTopDoctorHome = (limitInput) => {
   return new Promise(async (resolve, reject) => {
