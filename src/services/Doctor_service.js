@@ -456,7 +456,7 @@ let sendRemedy = (data) => {
         });
 
         if (appointment) {
-          appointment.statusId = "S3";
+          // appointment.statusId = "S3";
           await appointment.save();
         }
 
@@ -468,6 +468,7 @@ let sendRemedy = (data) => {
           doctorName: data.doctorName,
           time: data.time,
           language: data.language,
+          note: data.note,
         });
 
         resolve({
