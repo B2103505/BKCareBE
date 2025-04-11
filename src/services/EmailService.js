@@ -39,9 +39,10 @@ let sendAttachmentEmail = async (dataSend) => {
     html: getRemedyBodyHTML(dataSend),
     attachments: [
       {
-        filename: "remedy.pdf",
+        filename: "remedy.jpg",
         content: dataSend.imgBase64.split("base64,")[1],
         encoding: "base64",
+        contentType: "image/jpeg",
       },
     ],
   });
