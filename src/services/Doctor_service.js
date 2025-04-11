@@ -5,6 +5,7 @@ import { raw } from "body-parser";
 
 require("dotenv").config();
 const MAX_NUMBER_SCHEDULE = process.env.MAX_NUMBER_SCHEDULE;
+const emailService = require("./emailService");
 
 let getTopDoctorHome = (limitInput) => {
   return new Promise(async (resolve, reject) => {
@@ -433,6 +434,54 @@ let getListPatientForDoctor = (doctorId, date) => {
   });
 };
 
+let sendRemedy = (data) => {
+  console.log("Check data backend", data);
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!data.email || !data.doctorId || !data.patientId || !data.timeType) {
+        resolve({
+          errCode: 1,
+          errMessage: "Missing required parameter !",
+        });
+      } else {
+        //update Patient status
+        let appointment = await db.Booking.findOne({
+          where: {
+            doctorId: data.doctorId,
+            patientId: data.patientId,
+            timeType: data.timeType,
+            statusId: "S2",
+          },
+          raw: false,
+        });
+
+        if (appointment) {
+          appointment.statusId = "S3";
+          await appointment.save();
+        }
+
+        // send Email remedy
+        await emailService.sendAttachmentEmail({
+          email: data.email,
+          imgBase64: data.imgBase64,
+          patientName: data.patientName,
+          doctorName: data.doctorName,
+          time: data.time,
+          language: data.language,
+        });
+
+        resolve({
+          errCode: 0,
+          errMessage: "Success",
+          data: data,
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 module.exports = {
   getTopDoctorHome: getTopDoctorHome,
   getAllDoctors: getAllDoctors,
@@ -443,4 +492,5 @@ module.exports = {
   getExtraInfoByIdService: getExtraInfoByIdService,
   getProfileDoctorByIdService: getProfileDoctorByIdService,
   getListPatientForDoctor: getListPatientForDoctor,
+  sendRemedy: sendRemedy,
 };
